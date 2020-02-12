@@ -1,0 +1,133 @@
+// Copyright (c) 2020 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+//   https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//     IBM Corporation
+//
+:projectid: cloud-google
+:page-layout: guide-multipane
+:page-duration: 1 hour
+:page-releasedate: 2020-03-25
+:page-description: Explore how to deploy microservices to Google Cloud Platform Kubernetes Engine (GKE).
+:page-tags: ['Kubernetes', 'Docker', 'Cloud']
+:page-permalink: /guides/{projectid}
+:page-related-guides: ['kubernetes-intro', 'kubernetes-microprofile-config', 'kubernetes-microprofile-health']
+:common-includes: ../guides-common/
+:source-highlighter: prettify
+:page-seo-title: Deploying Java microservices to Google Cloud Platform with Kubernetes
+:page-seo-description: A getting started tutorial with examples on how to deploy Java microservices to Google Cloud Platform (GCP) using Google Kubernetes Engine (GKE).
+:guide-author: Open Liberty
+:page-essential: false
+= Deploying microservices to Google Cloud Platform
+
+[.hidden]
+NOTE: This repository contains the guide documentation source. To view the guide in published form,
+view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+
+Explore how to deploy microservices to Google Kubernetes Engine (GKE) on Google Cloud Platform (GCP).
+
+:kube: Kubernetes
+:hashtag: #
+:win: WINDOWS
+:mac: MAC
+:linux: LINUX
+:system-api: http://[hostname]:31000/system/properties
+:inventory-api: http://[hostname]:32000/inventory/systems
+
+
+// =================================================================================================
+// Introduction
+// =================================================================================================
+
+== What you'll learn
+
+You will learn how to deploy two microservices in Open Liberty containers to a {kube} cluster on
+Google Kubernetes Engine (GKE).
+
+Kubernetes is an open source container orchestrator that automates many tasks involved in 
+deploying, managing, and scaling containerized applications. If you would like to learn
+more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
+guide.
+
+There are different cloud-based solutions for running your {kube} workloads. 
+A cloud-based infrastructure enables you to focus on developing your microservices 
+without worrying about low-level infrastructure details for deployment. Using a cloud helps
+you to easily scale and manage your microservices in a high-availability setup.
+
+Google Cloud Platform offers a managed {kube} service called Google Kubernetes Engine (GKE). Using GKE simplifies the process of running Kubernetes on Google Cloud Platform without 
+needing to install or maintain your own Kubernetes control plane. It provides a hosted {kube} 
+cluster that you can deploy your microservices to. You will use GKE with a Google
+Container Registry (GCR). GCR is a private registry that is used to store 
+and distribute your container images. Note, since GKE is not free, a small
+cost is associated with running this guide. See the official
+https://cloud.google.com/kubernetes-engine/pricing[GKE pricing^] documentation for more details.
+
+The two microservices you will deploy are called `system` and `inventory`. 
+The `system` microservice returns the JVM system properties of the running container. 
+It also returns the name of the pod in the HTTP header, making replicas easy to distinguish from each other. 
+The `inventory` microservice adds the properties from the `system` microservice to the inventory. 
+This demonstrates how communication can be established between pods inside a cluster.
+
+// =================================================================================================
+// Prerequisites
+// =================================================================================================
+
+== Additional prerequisites
+
+Before you begin, the following additional tools need to be installed:
+
+* *Google Account:* To run this guide and use Google Cloud Platform, you will need a Google account. If you do not
+have an account already, navigate to the 
+https://accounts.google.com/signup[Google account sign-up page^] 
+to create a Google account.
+
+* *Google Cloud Platform Account:* Visit the https://console.cloud.google.com/[Google Cloud Platform console^] to link your
+Google account to Google Cloud Platform. A free trial Google Cloud Platform account provides $300 credit over 12 months, and
+has a sufficient amount of resources to run this guide. https://console.cloud.google.com/freetrial/signup/tos[Sign up for a free trial account^]
+to try Google Cloud Platform for free.
+
+* *Google Cloud SDK - CLI:* You will need to use the `gcloud` command-line tool included in the https://cloud.google.com/sdk[Google Cloud SDK^]. 
+See the official
+https://cloud.google.com/sdk/docs/quickstarts[Install the Cloud SDK: Command Line Interface^]
+documentation for information about setting up the Google Cloud Platform CLI for your platform. 
+To verify that the `gcloud` is installed correctly, run the following command:
+
++
+[role=command]
+```
+gcloud info
+```
+
+* *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your Kubernetes cluster.
+If you do not have `kubectl` installed already, use the Google Cloud Platform CLI to download and install `kubectl` with the following command:
+
++
+[role=command]
+```
+gcloud components install kubectl
+```
+
+// =================================================================================================
+// Getting started
+// =================================================================================================
+
+[role=command]
+include::{common-includes}/gitclone.adoc[]
+
+// no "try what you'll build" section in this guide since it would be too long due to all the setup the user will have to do.
+
+// =================================================================================================
+// Setting up your Google Cloud project
+// =================================================================================================
+
+== Setting up your Google Cloud project
+
+=== Initializing the Google Cloud SDK
+
+To create a Google Cloud Project, first initialize the Google Cloud SDK by peforming the `gcloud` inital setup.
+The `gcloud init` command launches an interactive setup that creates or modifies configuration for `gcloud`,
+such as setting the user account or specifying the project to use.  
+
+
