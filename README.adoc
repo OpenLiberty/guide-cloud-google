@@ -128,6 +128,38 @@ include::{common-includes}/gitclone.adoc[]
 
 To create a Google Cloud Project, first initialize the Google Cloud SDK by peforming the `gcloud` inital setup.
 The `gcloud init` command launches an interactive setup that creates or modifies configuration for `gcloud`,
-such as setting the user account or specifying the project to use.  
+such as setting the user account or specifying the project to use:
+
+[role=command]
+```
+gcloud init
+```
+
+Follow the prompt to log in with your Google Cloud Platform account.
+This authorizes Google Cloud SDK to access Google Cloud Platform using your account credentials.
+
+If you do not have any projects on your account, you will be prompted to create one.
+Otherwise, select the option to create a new project.
+
+You will need to specify a Project ID for your project.
+Enter a Project ID that is unique within Google Cloud and matches the pattern described in the prompt.
+
+
+If the Project ID is available to use, you see the following output:
+
+[role="no_copy"]
+----
+Your current project has been set to: [project-id].
+...
+Your Google Cloud SDK is configured and ready to use!
+----
+
+Make sure that billing is enabled for your project, so that you can use its Google Cloud services.
+Follow the https://cloud.google.com/billing/docs/how-to/modify-project[Modify a Project's Billing Settings^]
+documentation to enable billing for your Google cloud project.
+
+=== Enabling APIs for your project
+
+
 
 
