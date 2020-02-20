@@ -155,11 +155,476 @@ Your Google Cloud SDK is configured and ready to use!
 ----
 
 Make sure that billing is enabled for your project, so that you can use its Google Cloud services.
-Follow the https://cloud.google.com/billing/docs/how-to/modify-project[Modify a Project's Billing Settings^]
+Follow the https://cloud.google.com/billing/docs/how-to/modify-project#confirm_billing_is_enabled_on_a_project[Modify a Project's Billing Settings^]
 documentation to enable billing for your Google cloud project.
 
-=== Enabling APIs for your project
+=== Enabling Google Cloud APIs for your project
+
+To run this guide, you need to use certain Google Cloud services, such as the
+`Compute Engine API`, `Cloud Build API`, and the `Kubernetes Engine API`.
+
+You will use the `Compute Engine API` to set the default Compute Engine region and zone where the
+resources for your cloud deployments will be hosted on.
+
+The `Cloud Build API` allows you to build container images and push them to a Google Container Registry. 
+Your private container registry manages and stores the container images that you build in later steps.
+
+To deploy your application to Google Kubernetes Engine (GKE), you will need to enable the `Kubernetes Engine API`.
+The container images that you build will run on a Google Kubernetes Engine cluster.
+
+Enable the necessary Google Cloud APIs for your project using the `gcloud services enable` command.
+To see a list of Google Cloud APIs and services that are available for your project, run the following command:
+
+[role=command]
+```
+gcloud services list --available
+```
+
+You see an output similar to the following:
+
+[role="no_copy"]
+----
+NAME                                                  TITLE
+abusiveexperiencereport.googleapis.com                Abusive Experience Report API
+cloudbuild.googleapis.com                             Cloud Build API
+composer.googleapis.com                               Cloud Composer API
+compute.googleapis.com                                Compute Engine API
+computescanning.googleapis.com                        Compute Scanning API
+contacts.googleapis.com                               Contacts API
+container.googleapis.com                              Kubernetes Engine API
+containeranalysis.googleapis.com                      Container Analysis API
+containerregistry.googleapis.com                      Container Registry API
+----
+
+The `NAME` field is the value that you need to pass into the `gcloud services enable` command, to enable an API.
+
+Run the following command to enable the `Compute Engine API`, `Cloud Build API`, and the `Kubernetes Engine API`:
+
+[role=command]
+```
+gcloud services enable compute.googleapis.com cloudbuild.googleapis.com container.googleapis.com
+```
+
+=== Setting the default region and zone
+
+A Compute Engine region is a geographical location used to host your Compute Engine resources. 
+Each region is composed of multiple zones. For example, the `asia-east1` region is divided into
+multiple zones: `asia-east1-a`, `asia-east1-b`, `asia-east1-c`. 
+Some resources are limited to specific regions or zones, and other resources are available across all regions.
+See the
+https://cloud.google.com/compute/docs/regions-zones/global-regional-zonal-resources[Global, Regional, and Zonal Resources^]
+documentation for more details.
+
+If resources are created without specifying a region or zone, 
+these new resources run in the default location for your project.
+The metadata for your resources are stored at this specified Google Cloud location.
+
+See the list of available zones and its corresponding regions for your project:
+
+[role=command]
+```
+gcloud compute zones list
+```
+
+You see an output similar to the following:
+
+[role="no_copy"]
+----
+NAME                       REGION                   STATUS
+us-west1-b                 us-west1                 UP
+us-west1-c                 us-west1                 UP
+us-west1-a                 us-west1                 UP
+europe-west1-b             europe-west1             UP
+europe-west1-d             europe-west1             UP
+europe-west1-c             europe-west1             UP
+asia-east1-b               asia-east1               UP
+asia-east1-a               asia-east1               UP
+asia-east1-c               asia-east1               UP
+southamerica-east1-b       southamerica-east1       UP
+southamerica-east1-c       southamerica-east1       UP
+southamerica-east1-a       southamerica-east1       UP
+northamerica-northeast1-a  northamerica-northeast1  UP
+northamerica-northeast1-b  northamerica-northeast1  UP
+northamerica-northeast1-c  northamerica-northeast1  UP
+----
+
+To set the default Compute Engine region and zone, run the `gcloud config set compute` command.
+Remember to replace `[region]` and `[zone]` with a region and zone that is available for your project.
+Make sure that your zone is within the region that you set.
+
+[role=command]
+```
+gcloud config set compute/region [region]
+gcloud config set compute/zone [zone]
+```
+
+// =================================================================================================
+// Uploading images to a container registry
+// =================================================================================================
+
+== Uploading images to a container registry
+
+The starting Java project, which you can find in the `start` directory, is a multi-module Maven
+project. It is made up of the `system` and `inventory` microservices. Each microservice exists in its own directory,
+`start/system` and `start/inventory`. Both of these directories contain a Dockerfile, which is necessary
+for building the container images. If you're unfamiliar with Dockerfiles, check out the
+https://openliberty.io/guides/containerize.html[Containerizing microservices^] guide.
+
+Navigate to the `start` directory and run the following command:
+
+[role=command]
+```
+mvn package
+```
+
+Now that your microservices are packaged, build your container images using Google Cloud Build.
+Instead of having to install Docker locally to containerize your application, you can use Cloud Build's
+`gcloud build submit --tag` command to build a Docker image using a Dockerfile, and push the image to a container registry. 
+Cloud Build is similar to running the `docker build` and `docker push` commands.
+
+The `gcloud build submit --tag` command needs to be run from the directory containing the Dockerfile.
+You will build images for `system` and `inventory` by running the `gcloud build submit --tag` command
+from both the `start/system` and `start/inventory` directory.
+
+Navigate to the `start/system` directory.
+
+Build the `system` image and push it to your container registry using Cloud Build.
+Your container registry is located at `gcr.io/[project-id]`.
+Replace `[project-id]` with the Project ID that you previously defined for your Google Cloud project.
+To get the Project ID for your project, run the `gcloud config get-value project` command.
+
+[role=command]
+```
+gcloud builds submit --tag gcr.io/[project-id]/system:1.0-SNAPSHOT
+```
+
+If the `system` image builds and pushes successfully, you see the following output:
+
+[role="no_copy"]
+----
+DONE
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ID                                    CREATE_TIME                DURATION  SOURCE                                                                                  IMAGES                                     STATUS
+30a71b4c-3481-48da-9faa-63f689316c3b  2020-02-12T16:22:33+00:00  1M37S     gs://[project-id]_cloudbuild/source/1581524552.36-65181b73aa63423998ae8ecdfbaeddff.tgz  gcr.io/[project-id]/system:1.0-SNAPSHOT    SUCCESS
+----
+
+Navigate to the `start/inventory` directory.
+
+Build the `inventory` image and push it to your container registry using Cloud Build:
+
+[role=command]
+```
+gcloud builds submit --tag gcr.io/[project-id]/inventory:1.0-SNAPSHOT
+```
+
+You see the following output:
+
+[role="no_copy"]
+----
+DONE
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ID                                    CREATE_TIME                DURATION  SOURCE                                                                                  IMAGES                                       STATUS
+edbf9f6f-f01b-46cf-a998-594ad2df9bb3  2020-02-12T16:25:49+00:00  1M11S     gs://[project-id]_cloudbuild/source/1581524748.42-445ddab4cd3b4ba18e28a965e3942cea.tgz  gcr.io/[project-id]/inventory:1.0-SNAPSHOT   SUCCESS
+----
 
 
+To verify that the images are built, run the following command to list all existing container images for your project:
+
+[role='command']
+```
+gcloud container images list
+```
+
+Your two images `system` and `inventory` should appear in the list of all container images:
+
+[role="no_copy"]
+----
+NAME
+gcr.io/[project-id]/inventory
+gcr.io/[project-id]/system
+----
+
+// =================================================================================================
+// Provisioning a Kubernetes cluster on GKE
+// =================================================================================================
+
+== Provisioning a Kubernetes cluster on GKE
+
+To create your GKE cluster, use the `gcloud container clusters create` command. 
+When the cluster is created, the command outputs information about the cluster.
+You might need to wait while your cluster is being created.
+
+Replace `[cluster-name]` with a name that you want for your cluster.
+The name for your cluster must only contain lowercase alphanumeric characters and `-`,
+and must start with a letter and end with an alphanumeric character.
+
+[role=command]
+```
+gcloud container clusters create [cluster-name] --num-nodes 1
+```
+
+You see the following output:
+
+[role="no_copy"]
+----
+NAME            LOCATION   MASTER_VERSION  MASTER_IP     MACHINE_TYPE   NODE_VERSION    NUM_NODES  STATUS
+[cluster-name]  [zone]     1.13.11-gke.23  35.203.77.52  n1-standard-1  1.13.11-gke.23  1          RUNNING
+----
+
+Since a zone was not specified, your cluster was created in the default zone that you previously defined.
+
+The option `--num-nodes` creates a cluster with a certain number of nodes in the Kubernetes node pool. 
+By default, if this option is excluded, three nodes are assigned to the node pool.
+You created a single-node cluster since this application does not require a large amount of resources.
+
+Run the following command to check the status of the available node in your GKE cluster:
+
+[role=command]
+```
+kubectl get nodes
+```
+
+The `kubectl get nodes` command outputs information about the node.
+The `STATUS` of each node is in the `Ready` state. 
+
+[role="no_copy"]
+----
+NAME                                           STATUS   ROLES    AGE   VERSION
+gke-[cluster-name]-default-pool-be4471fe-qnl6   Ready    <none>   46s   v1.13.11-gke.23
+----
 
 
+// =================================================================================================
+// Deploying microservices to GKE
+// =================================================================================================
+
+== Deploying microservices to GKE
+
+Now that your container images are built and you have created a Kubernetes cluster, you can deploy the images using a Kubernetes resource definition.
+
+A Kubernetes resource definition is a `yaml` file that contains a description of all your 
+deployments, services, or any other resources that you want to deploy. All resources can 
+also be deleted from the cluster by using the same `yaml` file that you used to deploy them.
+The [hotspot file=0]`kubernetes.yaml` resource definition file is provided for you. If you are interested 
+in learning more about the Kubernetes resource definition, check out the 
+https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
+guide.
+
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Update the `kubernetes.yaml`.#
+`kubernetes.yaml`
+----
+[role="edit_command_text"]
+Replace [hotspot=sysImage hotspot=invImage file=0]`[project-id]` with your Project ID.
+You can get the Project ID for your project by running `gcloud config get-value project` command.
+
+kubernetes.yaml
+[source, Text, linenums, indent=0, role="code_column"]
+----
+include::finish/kubernetes.yaml[]
+----
+
+The [hotspot=sysImage hotspot=invImage file=0]`image` is the name and tag of the container image that you want 
+to use for the container. The [hotspot]`kubernetes.yaml` file references the images that you pushed to your registry
+for the [hotspot=sysImage file=0]`system` and [hotspot=invImage file=0]`inventory` repositories.
+
+The service that is used to expose your deployments has a type of [hotspot=sysNodePort hotspot=invNodePort file=0]`NodePort`.
+This means you can access these services from outside of your cluster via a specific port.
+You can expose your services in other ways such as using a `LoadBalancer` service type or using an `Ingress`.
+In production, you would most likely use an Ingress.
+
+=== Deploying your application
+
+To deploy your microservices to Google Kubernetes Engine, you need Kubernetes to create
+the contents of the [hotspot]`kubernetes.yaml` file.
+
+Navigate to the `start` directory and run the following command to deploy the resources defined in the [hotspot file=0]`kubernetes.yaml` file:
+
+[role='command']
+```
+kubectl apply -f kubernetes.yaml
+```
+
+You will see an output similar to the following:
+
+[role="no_copy"]
+----
+deployment.apps/system-deployment created
+deployment.apps/inventory-deployment created
+service/system-service created
+service/inventory-service created
+----
+
+Run the following command to check the status of your pods:
+[role='command']
+```
+kubectl get pods
+```
+
+If all the pods are healthy and running, you see an output similar to the following:
+[role="no_copy"]
+----
+NAME                                    READY     STATUS    RESTARTS   AGE
+system-deployment-6bd97d9bf6-4ccds      1/1       Running   0          15s
+inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
+----
+
+=== Making requests to the microservices
+
+To try out your microservices, you need to allow TCP traffic on your node ports, `31000` and `32000`,
+for the `system` and `inventory` microservice.
+
+Create a firewall rule to allow TCP traffic on your node ports:
+
+[role='command']
+```
+gcloud compute firewall-rules create sys-node-port --allow tcp:31000
+gcloud compute firewall-rules create inv-node-port --allow tcp:32000
+```
+
+Take note of the `EXTERNAL-IP` in the output of the following command. It is the hostname you will later substitute into `[hostname]`:
+
+[role='command']
+```
+kubectl get nodes -o wide
+```
+
+[role="no_copy"]
+----
+NAME                                  STATUS   ROLES    AGE   VERSION           INTERNAL-IP   EXTERNAL-IP
+gke-[cluster-name]-default-pool-be4   Ready    <none>   14m   v1.13.11-gke.23   10.162.0.2    35.203.106.216
+----
+
+To access your microservices, point your browser to the following URLs, substituting the appropriate `[hostname]` value:
+
+- `{system-api}`
+- `{inventory-api}`
+
+In the first URL, you see a result in JSON format with the system properties of the container JVM.
+The second URL returns an empty list, which is expected because no system properties are stored in the inventory yet. 
+
+Point your browser to the `{inventory-api}/system-service` URL. When you visit this URL, these system
+properties are automatically stored in the inventory. Go back to `{inventory-api}` and
+you see a new entry for `system-service`.
+
+// =================================================================================================
+// Testing the microservices
+// =================================================================================================
+
+== Testing the microservices
+
+A few tests are included for you to test the basic functionality of the microservices. 
+If a test failure occurs, then you might have introduced a bug into the code. 
+To run the tests, wait for all pods to be in the ready state before you proceed further.
+
+pom.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/inventory/pom.xml[]
+----
+
+The default properties that are defined in the [hotspot file=0]`pom.xml` file are:
+
+[cols="15, 100", options="header"]
+|===
+| *Property*                                | *Description*
+| [hotspot=cluster file=0]`cluster.ip`                         | IP or hostname for your cluster
+| [hotspot=system-service file=0]`system.kube.service`         | Name of the `Kubernetes` Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system-node-port file=0]`system.node.port`          | The HTTP port for the {kube} Service `system-service`, 9080 by default.
+| [hotspot=inventory-node-port file=0]`inventory.node.port`     The HTTP port of the {kube} Service `inventory-service`, 9081 by default.
+|===
+
+
+=== Running the tests
+
+Run the Maven `failsafe:integration-test` goal to test your microservices by replacing the `[hostname]`
+with the value determined in the previous section.
+
+[role='command']
+```
+mvn failsafe:integration-test -Dcluster.ip=[hostname]
+```
+
+If the tests pass, you will see an output similar to the following for each service:
+
+[role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.system.SystemEndpointIT
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.system.SystemEndpointIT
+
+Results:
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+----
+
+[role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.inventory.InventoryEndpointIT
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.inventory.InventoryEndpointIT
+
+Results:
+
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+----
+
+// =================================================================================================
+// Tearing down the environment
+// =================================================================================================
+
+== Tearing down the environment
+
+It is important to clean up your resources when you are finished with the guide so that you do not incur extra charges for ongoing usage.
+
+When you no longer need your deployed microservices, you can delete all {kube} resources 
+by running the `kubectl delete` command:
+
+[role='command']
+```
+kubectl delete -f kubernetes.yaml
+```
+
+Since you are done testing your cluster, clean up all of its related sources using the `gcloud container clusters delete` command.
+
+[role='command']
+```
+gcloud container clusters delete [cluster-name]
+```
+
+Remove the container images from the container registry:
+
+[role='command']
+```
+gcloud container images delete gcr.io/[project-id]/system:1.0-SNAPSHOT
+gcloud container images delete gcr.io/[project-id]/inventory:1.0-SNAPSHOT
+```
+
+Delete your Google Cloud project:
+
+[role='command']
+```
+gcloud projects delete [project-id]
+```
+
+// =================================================================================================
+// finish
+// =================================================================================================
+
+== Great work! You're done!
+
+You have just deployed two microservices running in Open Liberty to Google Kubernetes Engine (GKE). You also 
+learned how to use `kubectl` to deploy your microservices on a {kube} cluster.
+
+// Multipane
+include::{common-includes}/attribution.adoc[subs="attributes"]
+
+// DO NO CREATE ANYMORE SECTIONS AT THIS POINT
+// Related guides will be added in automatically here if you included them in ":page-related-guides"

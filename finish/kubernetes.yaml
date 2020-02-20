@@ -15,7 +15,9 @@ spec:
     spec:
       containers:
       - name: system-container
+        # tag::sysImage[]
         image: gcr.io/[project-id]/system:1.0-SNAPSHOT
+        # end::sysImage[]
         ports:
         - containerPort: 9080
 ---
@@ -36,7 +38,9 @@ spec:
     spec:
       containers:
       - name: inventory-container
+        # tag::invImage[]
         image: gcr.io/[project-id]/inventory:1.0-SNAPSHOT
+        # end::invImage[]
         ports:
         - containerPort: 9080
 ---
@@ -45,7 +49,9 @@ kind: Service
 metadata:
   name: system-service
 spec:
+  # tag::sysNodePort[]
   type: NodePort
+  # end::sysNodePort[]
   selector:
     app: system
   ports:
@@ -59,7 +65,9 @@ kind: Service
 metadata:
   name: inventory-service
 spec:
+  # tag::invNodePort[]
   type: NodePort
+  # end::invNodePort[]
   selector:
     app: inventory
   ports:
