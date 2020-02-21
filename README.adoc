@@ -8,7 +8,7 @@
 //
 :projectid: cloud-google
 :page-layout: guide-multipane
-:page-duration: 1 hour
+:page-duration: 45 minutes
 :page-releasedate: 2020-03-25
 :page-description: Explore how to deploy microservices to Google Cloud Platform Kubernetes Engine (GKE).
 :page-tags: ['Kubernetes', 'Docker', 'Cloud']
@@ -196,7 +196,7 @@ containeranalysis.googleapis.com                      Container Analysis API
 containerregistry.googleapis.com                      Container Registry API
 ----
 
-The `NAME` field is the value that you need to pass into the `gcloud services enable` command, to enable an API.
+The `NAME` field is the value that you need to pass into the `gcloud services enable` command to enable an API.
 
 Run the following command to enable the `Compute Engine API`, `Cloud Build API`, and the `Kubernetes Engine API`:
 
@@ -209,7 +209,7 @@ gcloud services enable compute.googleapis.com cloudbuild.googleapis.com containe
 
 A Compute Engine region is a geographical location used to host your Compute Engine resources. 
 Each region is composed of multiple zones. For example, the `asia-east1` region is divided into
-multiple zones: `asia-east1-a`, `asia-east1-b`, `asia-east1-c`. 
+multiple zones: `asia-east1-a`, `asia-east1-b`, and `asia-east1-c`.
 Some resources are limited to specific regions or zones, and other resources are available across all regions.
 See the
 https://cloud.google.com/compute/docs/regions-zones/global-regional-zonal-resources[Global, Regional, and Zonal Resources^]
@@ -365,7 +365,7 @@ and must start with a letter and end with an alphanumeric character.
 gcloud container clusters create [cluster-name] --num-nodes 1
 ```
 
-You see the following output:
+When your cluster is successfully created, you see the following output:
 
 [role="no_copy"]
 ----
@@ -387,12 +387,12 @@ kubectl get nodes
 ```
 
 The `kubectl get nodes` command outputs information about the node.
-The `STATUS` of each node is in the `Ready` state. 
+The `STATUS` of the node is in the `Ready` state.
 
 [role="no_copy"]
 ----
 NAME                                           STATUS   ROLES    AGE   VERSION
-gke-[cluster-name]-default-pool-be4471fe-qnl6   Ready    <none>   46s   v1.13.11-gke.23
+gke-[cluster-name]-default-pool-be4471fe-qnl6  Ready    <none>   46s   v1.13.11-gke.23
 ----
 
 
@@ -419,7 +419,7 @@ guide.
 ----
 [role="edit_command_text"]
 Replace [hotspot=sysImage hotspot=invImage file=0]`[project-id]` with your Project ID.
-You can get the Project ID for your project by running `gcloud config get-value project` command.
+You can get the Project ID for your project by running the `gcloud config get-value project` command.
 
 kubernetes.yaml
 [source, Text, linenums, indent=0, role="code_column"]
@@ -434,7 +434,7 @@ for the [hotspot=sysImage file=0]`system` and [hotspot=invImage file=0]`inventor
 The service that is used to expose your deployments has a type of [hotspot=sysNodePort hotspot=invNodePort file=0]`NodePort`.
 This means you can access these services from outside of your cluster via a specific port.
 You can expose your services in other ways such as using a `LoadBalancer` service type or using an `Ingress`.
-In production, you would most likely use an Ingress.
+In production, you would most likely use an `Ingress`.
 
 === Deploying your application
 
@@ -475,7 +475,7 @@ inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
 === Making requests to the microservices
 
 To try out your microservices, you need to allow TCP traffic on your node ports, `31000` and `32000`,
-for the `system` and `inventory` microservice.
+for the `system` and `inventory` microservices.
 
 Create a firewall rule to allow TCP traffic on your node ports:
 
@@ -532,9 +532,9 @@ The default properties that are defined in the [hotspot file=0]`pom.xml` file ar
 |===
 | *Property*                                | *Description*
 | [hotspot=cluster file=0]`cluster.ip`                         | IP or hostname for your cluster
-| [hotspot=system-service file=0]`system.kube.service`         | Name of the `Kubernetes` Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=system-node-port file=0]`system.node.port`          | The NodePort of the Kubernetes Service system-service, 31000 by default.
-| [hotspot=inventory-node-port file=0]`inventory.node.port`    | The NodePort of the Kubernetes Service system-service, 32000 by default.
+| [hotspot=system-service file=0]`system.kube.service`         | Name of the Kubernetes Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system-node-port file=0]`system.node.port`          | The NodePort of the Kubernetes Service `system-service`, 31000 by default.
+| [hotspot=inventory-node-port file=0]`inventory.node.port`    | The NodePort of the Kubernetes Service `inventory-service`, 32000 by default.
 |===
 
 
