@@ -126,9 +126,9 @@ include::{common-includes}/gitclone.adoc[]
 
 === Initializing the Google Cloud SDK
 
-To create a Google Cloud Project, first initialize the Google Cloud SDK by peforming the `gcloud` inital setup.
+To create a Google Cloud Project, first initialize the Google Cloud SDK by performing the `gcloud` initial setup.
 The `gcloud init` command launches an interactive setup that creates or modifies configuration for `gcloud`,
-such as setting the user account or specifying the project to use:
+such as setting the user account and specifying the project to use:
 
 [role=command]
 ```
@@ -373,7 +373,8 @@ NAME            LOCATION   MASTER_VERSION  MASTER_IP     MACHINE_TYPE   NODE_VER
 [cluster-name]  [zone]     1.13.11-gke.23  35.203.77.52  n1-standard-1  1.13.11-gke.23  1          RUNNING
 ----
 
-Since a zone was not specified, your cluster was created in the default zone that you previously defined.
+Since a zone was not specified in the `gcloud container clusters create` command,
+your cluster was created in the default zone that you previously set in the `gcloud config set compute/zone` command.
 
 The option `--num-nodes` creates a cluster with a certain number of nodes in the Kubernetes node pool. 
 By default, if this option is excluded, three nodes are assigned to the node pool.
