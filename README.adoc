@@ -279,11 +279,11 @@ mvn package
 
 Now that your microservices are packaged, build your container images using Google Cloud Build.
 Instead of having to install Docker locally to containerize your application, you can use Cloud Build's
-`gcloud build submit --tag` command to build a Docker image using a Dockerfile, and push the image to a container registry. 
+`gcloud builds submit --tag` command to build a Docker image using a Dockerfile, and push the image to a container registry. 
 Cloud Build is similar to running the `docker build` and `docker push` commands.
 
-The `gcloud build submit --tag` command needs to be run from the directory containing the Dockerfile.
-You will build images for `system` and `inventory` by running the `gcloud build submit --tag` command
+The `gcloud builds submit --tag` command needs to be run from the directory containing the Dockerfile.
+You will build images for `system` and `inventory` by running the `gcloud builds submit --tag` command
 from both the `start/system` and `start/inventory` directory.
 
 Navigate to the `start/system` directory.
@@ -393,7 +393,7 @@ The `STATUS` of the node is in the `Ready` state.
 [role="no_copy"]
 ----
 NAME                                           STATUS   ROLES    AGE   VERSION
-gke-[cluster-name]-default-pool-be4471fe-qnl6  Ready    <none>   46s   v1.13.11-gke.23
+gke-[cluster-name]-default-pool-be4471fe-qnl6  Ready    <none>   46s   v1.14.10-gke.17
 ----
 
 
