@@ -86,7 +86,7 @@ to create a Google account.
 * *Google Cloud Platform Account:* Visit the https://console.cloud.google.com/[Google Cloud Platform console^] to link your
 Google account to Google Cloud Platform. A free trial Google Cloud Platform account provides $300 credit over 12 months, and
 has a sufficient amount of resources to run this guide. https://console.cloud.google.com/freetrial/signup/tos[Sign up for a free trial account^]
-to try Google Cloud Platform for free.
+to try Google Cloud Platform for free. You must provide your credit card information to set up a billing account and for Google to verify your identity. You will not be charged during your free trial.
 
 * *Google Cloud SDK - CLI:* You will need to use the `gcloud` command-line tool included in the https://cloud.google.com/sdk[Google Cloud SDK^]. 
 See the official
