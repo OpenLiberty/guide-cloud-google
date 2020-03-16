@@ -8,7 +8,7 @@
 //
 :projectid: cloud-google
 :page-layout: guide-multipane
-:page-duration: 45 minutes
+:page-duration: 1 hour
 :page-releasedate: 2020-03-25
 :page-description: Explore how to deploy microservices to Google Cloud Platform Kubernetes Engine (GKE).
 :page-tags: ['Kubernetes', 'Docker', 'Cloud']
@@ -90,8 +90,8 @@ to try Google Cloud Platform for free. You must provide your credit card informa
 
 * *Google Cloud SDK - CLI:* You will need to use the `gcloud` command-line tool included in the https://cloud.google.com/sdk[Google Cloud SDK^]. 
 See the official
-https://cloud.google.com/sdk/docs/quickstarts[Install the Cloud SDK: Command Line Interface^]
-documentation for information about setting up the Google Cloud Platform CLI for your platform. 
+https://cloud.google.com/sdk/docs/quickstarts[Cloud SDK: Command Line Interface - Quickstart^]
+documentation and complete the “Before you begin” section to set up the Google Cloud Platform CLI for your platform. 
 To verify that the `gcloud` is installed correctly, run the following command:
 
 +
@@ -408,10 +408,12 @@ Now that your container images are built and you have created a Kubernetes clust
 A Kubernetes resource definition is a `yaml` file that contains a description of all your 
 deployments, services, or any other resources that you want to deploy. All resources can 
 also be deleted from the cluster by using the same `yaml` file that you used to deploy them.
-The [hotspot file=0]`kubernetes.yaml` resource definition file is provided for you. If you are interested 
+The [hotspot file=0]`kubernetes.yaml` resource definition file is provided for you in the `start` directory. If you are interested 
 in learning more about the Kubernetes resource definition, check out the 
 https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
 guide.
+
+Navigate to the `start` directory.
 
 [role="code_command hotspot file=0", subs="quotes"]
 ----
@@ -532,7 +534,7 @@ The default properties that are defined in the [hotspot file=0]`pom.xml` file ar
 [cols="15, 100", options="header"]
 |===
 | *Property*                                | *Description*
-| [hotspot=cluster file=0]`cluster.ip`                         | IP or hostname for your cluster
+| [hotspot=cluster file=0]`cluster.ip`                         | IP or hostname for your cluster.
 | [hotspot=system-service file=0]`system.kube.service`         | Name of the Kubernetes Service wrapping the `system` pods, `system-service` by default.
 | [hotspot=system-node-port file=0]`system.node.port`          | The NodePort of the Kubernetes Service `system-service`, 31000 by default.
 | [hotspot=inventory-node-port file=0]`inventory.node.port`    | The NodePort of the Kubernetes Service `inventory-service`, 32000 by default.
