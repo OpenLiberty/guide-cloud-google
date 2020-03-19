@@ -29,7 +29,7 @@ curl http://$GUIDE_IP:$GUIDE_SYSTEM_PORT/system/properties
 curl http://$GUIDE_IP:$GUIDE_INVENTORY_PORT/inventory/systems/system-service
 
 mvn failsafe:integration-test -Dcluster.ip=`minikube ip`
-mvn verify
+mvn failsafe:verify
 
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
 
