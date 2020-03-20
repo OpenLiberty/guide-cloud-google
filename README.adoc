@@ -60,8 +60,8 @@ Google Cloud Platform offers a managed {kube} service called Google Kubernetes E
 needing to install or maintain your own Kubernetes control plane. It provides a hosted {kube} 
 cluster that you can deploy your microservices to. You will use GKE with a Google
 Container Registry (GCR). GCR is a private registry that is used to store 
-and distribute your container images. Note, since GKE is not free, a small
-cost is associated with running this guide. See the official
+and distribute your container images. Note, since GKE is hosted on Google Cloud Platform, a small
+cost may be associated with running this guide. See the official
 https://cloud.google.com/kubernetes-engine/pricing[GKE pricing^] documentation for more details.
 
 The two microservices you will deploy are called `system` and `inventory`. 
@@ -84,9 +84,7 @@ https://accounts.google.com/signup[Google account sign-up page^]
 to create a Google account.
 
 * *Google Cloud Platform Account:* Visit the https://console.cloud.google.com/[Google Cloud Platform console^] to link your
-Google account to Google Cloud Platform. A free trial Google Cloud Platform account provides $300 credit over 12 months, and
-has a sufficient amount of resources to run this guide. https://console.cloud.google.com/freetrial/signup/tos[Sign up for a free trial account^]
-to try Google Cloud Platform for free. You must provide your credit card information to set up a billing account and for Google to verify your identity. You will not be charged during your free trial.
+Google account to Google Cloud Platform.
 
 * *Google Cloud SDK - CLI:* You will need to use the `gcloud` command-line tool included in the https://cloud.google.com/sdk[Google Cloud SDK^]. 
 See the official
@@ -247,6 +245,8 @@ northamerica-northeast1-a  northamerica-northeast1  UP
 northamerica-northeast1-b  northamerica-northeast1  UP
 northamerica-northeast1-c  northamerica-northeast1  UP
 ----
+
+The `NAME` field and `REGION` field are the values that you will later substitute into `[zone]` and `[region]`, respectively.
 
 To set the default Compute Engine region and zone, run the `gcloud config set compute` command.
 Remember to replace `[region]` and `[zone]` with a region and zone that is available for your project.
@@ -593,6 +593,13 @@ by running the `kubectl delete` command:
 [role='command']
 ```
 kubectl delete -f kubernetes.yaml
+```
+
+Delete the firewall rules for your node ports:
+
+[role='command']
+```
+gcloud compute firewall-rules delete sys-node-port inv-node-port
 ```
 
 Since you are done testing your cluster, clean up all of its related sources using the `gcloud container clusters delete` command.
