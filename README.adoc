@@ -58,7 +58,7 @@ you to easily scale and manage your microservices in a high-availability setup.
 
 Google Cloud Platform offers a managed {kube} service called Google Kubernetes Engine (GKE). Using GKE simplifies the process of running Kubernetes on Google Cloud Platform without 
 needing to install or maintain your own Kubernetes control plane. It provides a hosted {kube} 
-cluster that you can deploy your microservices to. In this guide, you will use GKE with a Google
+cluster that you can deploy your microservices to. You will use GKE with a Google
 Container Registry (GCR). GCR is a private registry that is used to store 
 and distribute your container images. Note, since GKE is hosted on Google Cloud Platform, fees may be associated with running this guide. See the official
 https://cloud.google.com/kubernetes-engine/pricing[GKE pricing^] documentation for more details.
@@ -135,14 +135,14 @@ gcloud init
 Follow the prompt to log in with your Google Cloud Platform account.
 This authorizes Google Cloud SDK to access Google Cloud Platform using your account credentials.
 
-If you do not have any projects on your account, you will be automatically prompted to create one.
-Otherwise, select the "Create a new project" option.
+If you do not have any projects on your account, you will be prompted to create one.
+Otherwise, select the option to create a new project.
 
 You will need to specify a Project ID for your project.
 Enter a Project ID that is unique within Google Cloud and matches the pattern described in the prompt.
 
 
-If the Project ID is available to use, you will see the following output:
+If the Project ID is available to use, you see the following output:
 
 [role="no_copy"]
 ----
@@ -161,7 +161,7 @@ To run this guide, you need to use certain Google Cloud services, such as the
 `Compute Engine API`, `Cloud Build API`, and the `Kubernetes Engine API`.
 
 You will use the `Compute Engine API` to set the default Compute Engine region and zone where the
-resources for your cloud deployments will be hosted.
+resources for your cloud deployments will be hosted on.
 
 The `Cloud Build API` allows you to build container images and push them to a Google Container Registry. 
 Your private container registry manages and stores the container images that you build in later steps.
@@ -177,7 +177,7 @@ To see a list of Google Cloud APIs and services that are available for your proj
 gcloud services list --available
 ```
 
-You will see an output similar to the following:
+You see an output similar to the following:
 
 [role="no_copy"]
 ----
@@ -216,14 +216,14 @@ If resources are created without specifying a region or zone,
 these new resources run in the default location for your project.
 The metadata for your resources are stored at this specified Google Cloud location.
 
-Run the following command to see the list of available zones and its corresponding regions for your project:
+See the list of available zones and its corresponding regions for your project:
 
 [role=command]
 ```
 gcloud compute zones list
 ```
 
-You will see an output similar to the following:
+You see an output similar to the following:
 
 [role="no_copy"]
 ----
@@ -297,7 +297,7 @@ To get the Project ID for your project, run the `gcloud config get-value project
 gcloud builds submit --tag gcr.io/[project-id]/system:1.0-SNAPSHOT
 ```
 
-If the `system` image builds and pushes successfully, you will see the following output:
+If the `system` image builds and pushes successfully, you see the following output:
 
 [role="no_copy"]
 ----
@@ -317,7 +317,7 @@ Build the `inventory` image and push it to your container registry using Cloud B
 gcloud builds submit --tag gcr.io/[project-id]/inventory:1.0-SNAPSHOT
 ```
 
-You will see the following output:
+You see the following output:
 
 [role="no_copy"]
 ----
@@ -364,7 +364,7 @@ and must start with a letter and end with an alphanumeric character.
 gcloud container clusters create [cluster-name] --num-nodes 1
 ```
 
-When your cluster is successfully created, you will see the following output:
+When your cluster is successfully created, you see the following output:
 
 [role="no_copy"]
 ----
@@ -466,7 +466,7 @@ Run the following command to check the status of your pods:
 kubectl get pods
 ```
 
-If all the pods are healthy and running, you will see an output similar to the following:
+If all the pods are healthy and running, you see an output similar to the following:
 [role="no_copy"]
 ----
 NAME                                    READY     STATUS    RESTARTS   AGE
