@@ -46,26 +46,26 @@ Explore how to deploy microservices to Google Kubernetes Engine (GKE) on Google 
 You will learn how to deploy two microservices in Open Liberty containers to a {kube} cluster on
 Google Kubernetes Engine (GKE).
 
-Kubernetes is an open source container orchestrator that automates many tasks involved in 
+Kubernetes is an open source container orchestrator that automates many tasks that are involved in 
 deploying, managing, and scaling containerized applications. If you would like to learn
 more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
 guide.
 
 There are different cloud-based solutions for running your {kube} workloads. 
-A cloud-based infrastructure enables you to focus on developing your microservices 
+With a cloud-based infrastructure, you can focus on developing your microservices 
 without worrying about low-level infrastructure details for deployment. Using a cloud helps
-you to easily scale and manage your microservices in a high-availability setup.
+you easily scale and manage your microservices in a high-availability setup.
 
 Google Cloud Platform offers a managed {kube} service called Google Kubernetes Engine (GKE). Using GKE simplifies the process of running Kubernetes on Google Cloud Platform without 
 needing to install or maintain your own Kubernetes control plane. It provides a hosted {kube} 
-cluster that you can deploy your microservices to. You will use GKE with a Google
+cluster that you can deploy your microservices to. In this guide, you will use GKE with a Google
 Container Registry (GCR). GCR is a private registry that is used to store 
-and distribute your container images. Note, since GKE is hosted on Google Cloud Platform, fees may be associated with running this guide. See the official
+and distribute your container images. Because GKE is hosted on Google Cloud Platform, fees might be associated with running this guide. See the official
 https://cloud.google.com/kubernetes-engine/pricing[GKE pricing^] documentation for more details.
 
 The two microservices you will deploy are called `system` and `inventory`. 
 The `system` microservice returns the JVM system properties of the running container. 
-It also returns the name of the pod in the HTTP header, making replicas easy to distinguish from each other. 
+It also returns the name of the pod in the HTTP header, which makes replicas easy to distinguish from each other. 
 The `inventory` microservice adds the properties from the `system` microservice to the inventory. 
 This demonstrates how communication can be established between pods inside a cluster.
 
@@ -75,21 +75,21 @@ This demonstrates how communication can be established between pods inside a clu
 
 == Additional prerequisites
 
-Before you begin, the following additional tools need to be installed:
+Before you begin, the following tools need to be installed:
 
-* *Google Account:* To run this guide and use Google Cloud Platform, you will need a Google account. If you do not
+* *Google account:* To run this guide and use Google Cloud Platform, you will need a Google account. If you do not
 have an account already, navigate to the 
 https://accounts.google.com/signup[Google account sign-up page^] 
 to create a Google account.
 
-* *Google Cloud Platform Account:* Visit the https://console.cloud.google.com/[Google Cloud Platform console^] to link your
+* *Google Cloud Platform account:* Visit the https://console.cloud.google.com/[Google Cloud Platform console^] to link your
 Google account to Google Cloud Platform.
 
-* *Google Cloud SDK - CLI:* You will need to use the `gcloud` command-line tool included in the https://cloud.google.com/sdk[Google Cloud SDK^]. 
+* *Google Cloud SDK - CLI:* You will need to use the `gcloud` command-line tool that is included in the https://cloud.google.com/sdk[Google Cloud SDK^]. 
 See the official
 https://cloud.google.com/sdk/docs/quickstarts[Cloud SDK: Command Line Interface - Quickstart^]
 documentation and complete the “Before you begin” section to set up the Google Cloud Platform CLI for your platform. 
-To verify that the `gcloud` is installed correctly, run the following command:
+To verify that the `gcloud` tool is installed correctly, run the following command:
 
 +
 [role=command]
@@ -97,8 +97,8 @@ To verify that the `gcloud` is installed correctly, run the following command:
 gcloud info
 ```
 
-* *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your Kubernetes cluster.
-If you do not have `kubectl` installed already, use the Google Cloud Platform CLI to download and install `kubectl` with the following command:
+* *kubectl:* You need the Kubernetes `kubectl` command-line tool to interact with your Kubernetes cluster.
+If `kubectl` is not already installed, use the Google Cloud Platform CLI to download and install `kubectl` with the following command:
 
 +
 [role=command]
@@ -124,7 +124,7 @@ include::{common-includes}/gitclone.adoc[]
 === Initializing the Google Cloud SDK
 
 To create a Google Cloud Project, first initialize the Google Cloud SDK by performing the `gcloud` initial setup.
-The `gcloud init` command launches an interactive setup that creates or modifies configuration for `gcloud`,
+The `gcloud init` command starts an interactive setup that creates or modifies configuration for `gcloud`,
 such as setting the user account and specifying the project to use:
 
 [role=command]
@@ -133,16 +133,15 @@ gcloud init
 ```
 
 Follow the prompt to log in with your Google Cloud Platform account.
-This authorizes Google Cloud SDK to access Google Cloud Platform using your account credentials.
+This authorizes Google Cloud SDK to access Google Cloud Platform with your account credentials.
 
-If you do not have any projects on your account, you will be prompted to create one.
-Otherwise, select the option to create a new project.
+If you have existing projects, do not use them. Instead, create a new project for this guide. If you don't have existing projects, you will be automatically prompted to create a new one.
 
 You will need to specify a Project ID for your project.
-Enter a Project ID that is unique within Google Cloud and matches the pattern described in the prompt.
+Enter a Project ID that is unique within Google Cloud and matches the pattern that is described in the prompt.
 
 
-If the Project ID is available to use, you see the following output:
+If the Project ID is available to use, you will see the following output:
 
 [role="no_copy"]
 ----
@@ -151,9 +150,9 @@ Your current project has been set to: [project-id].
 Your Google Cloud SDK is configured and ready to use!
 ----
 
-Make sure that billing is enabled for your project, so that you can use its Google Cloud services.
+Make sure that billing is enabled for your project so that you can use its Google Cloud services.
 Follow the https://cloud.google.com/billing/docs/how-to/modify-project#confirm_billing_is_enabled_on_a_project[Modify a Project's Billing Settings^]
-documentation to enable billing for your Google cloud project.
+documentation to enable billing for your Google Cloud project.
 
 === Enabling Google Cloud APIs for your project
 
@@ -161,7 +160,7 @@ To run this guide, you need to use certain Google Cloud services, such as the
 `Compute Engine API`, `Cloud Build API`, and the `Kubernetes Engine API`.
 
 You will use the `Compute Engine API` to set the default Compute Engine region and zone where the
-resources for your cloud deployments will be hosted on.
+resources for your cloud deployments will be hosted.
 
 The `Cloud Build API` allows you to build container images and push them to a Google Container Registry. 
 Your private container registry manages and stores the container images that you build in later steps.
@@ -169,7 +168,7 @@ Your private container registry manages and stores the container images that you
 To deploy your application to Google Kubernetes Engine (GKE), you will need to enable the `Kubernetes Engine API`.
 The container images that you build will run on a Google Kubernetes Engine cluster.
 
-Enable the necessary Google Cloud APIs for your project using the `gcloud services enable` command.
+Enable the necessary Google Cloud APIs for your project by using the `gcloud services enable` command.
 To see a list of Google Cloud APIs and services that are available for your project, run the following command:
 
 [role=command]
@@ -177,7 +176,7 @@ To see a list of Google Cloud APIs and services that are available for your proj
 gcloud services list --available
 ```
 
-You see an output similar to the following:
+You will see an output similar to the following example:
 
 [role="no_copy"]
 ----
@@ -195,7 +194,7 @@ containerregistry.googleapis.com                      Container Registry API
 
 The `NAME` field is the value that you need to pass into the `gcloud services enable` command to enable an API.
 
-Run the following command to enable the `Compute Engine API`, `Cloud Build API`, and the `Kubernetes Engine API`:
+Run the following command to enable the `Compute Engine API`, `Cloud Build API`, and `Kubernetes Engine API`:
 
 [role=command]
 ```
@@ -204,7 +203,7 @@ gcloud services enable compute.googleapis.com cloudbuild.googleapis.com containe
 
 === Setting the default region and zone
 
-A Compute Engine region is a geographical location used to host your Compute Engine resources. 
+A Compute Engine region is a geographical location that is used to host your Compute Engine resources. 
 Each region is composed of multiple zones. For example, the `asia-east1` region is divided into
 multiple zones: `asia-east1-a`, `asia-east1-b`, and `asia-east1-c`.
 Some resources are limited to specific regions or zones, and other resources are available across all regions.
@@ -216,14 +215,14 @@ If resources are created without specifying a region or zone,
 these new resources run in the default location for your project.
 The metadata for your resources are stored at this specified Google Cloud location.
 
-See the list of available zones and its corresponding regions for your project:
+Run the following command to see the list of available zones and its corresponding regions for your project:
 
 [role=command]
 ```
 gcloud compute zones list
 ```
 
-You see an output similar to the following:
+You will see an output similar to the following example:
 
 [role="no_copy"]
 ----
@@ -245,10 +244,10 @@ northamerica-northeast1-b  northamerica-northeast1  UP
 northamerica-northeast1-c  northamerica-northeast1  UP
 ----
 
-The `NAME` field and `REGION` field are the values that you will later substitute into `[zone]` and `[region]`, respectively.
+The `NAME` field and `REGION` field are the values that you will later substitute into `[zone]` and `[region]`.
 
 To set the default Compute Engine region and zone, run the `gcloud config set compute` command.
-Remember to replace `[region]` and `[zone]` with a region and zone that is available for your project.
+Remember to replace `[region]` and `[zone]` with a region and a zone that are available for your project.
 Make sure that your zone is within the region that you set.
 
 [role=command]
@@ -276,18 +275,18 @@ Navigate to the `start` directory and run the following command:
 mvn package
 ```
 
-Now that your microservices are packaged, build your container images using Google Cloud Build.
-Instead of having to install Docker locally to containerize your application, you can use Cloud Build's
-`gcloud builds submit --tag` command to build a Docker image using a Dockerfile, and push the image to a container registry. 
+Now that your microservices are packaged, build your container images by using Google Cloud Build.
+Instead of installing Docker locally to containerize your application, you can use Cloud Build's
+`gcloud builds submit --tag` command to build a Docker image from a Dockerfile and push that image to a container registry. 
 Cloud Build is similar to running the `docker build` and `docker push` commands.
 
-The `gcloud builds submit --tag` command needs to be run from the directory containing the Dockerfile.
+Run the `gcloud builds submit --tag` command from the directories that contain the Dockerfiles.
 You will build images for `system` and `inventory` by running the `gcloud builds submit --tag` command
-from both the `start/system` and `start/inventory` directory.
+from both the `start/system` and `start/inventory` directories.
 
 Navigate to the `start/system` directory.
 
-Build the `system` image and push it to your container registry using Cloud Build.
+Build the `system` image and push it to your container registry by using Cloud Build.
 Your container registry is located at `gcr.io/[project-id]`.
 Replace `[project-id]` with the Project ID that you previously defined for your Google Cloud project.
 To get the Project ID for your project, run the `gcloud config get-value project` command.
@@ -297,7 +296,7 @@ To get the Project ID for your project, run the `gcloud config get-value project
 gcloud builds submit --tag gcr.io/[project-id]/system:1.0-SNAPSHOT
 ```
 
-If the `system` image builds and pushes successfully, you see the following output:
+If the `system` image builds and pushes successfully, you will see the following output:
 
 [role="no_copy"]
 ----
@@ -310,14 +309,14 @@ ID                                    CREATE_TIME                DURATION  SOURC
 
 Navigate to the `start/inventory` directory.
 
-Build the `inventory` image and push it to your container registry using Cloud Build:
+Build the `inventory` image and push it to your container registry by using Cloud Build:
 
 [role=command]
 ```
 gcloud builds submit --tag gcr.io/[project-id]/inventory:1.0-SNAPSHOT
 ```
 
-You see the following output:
+You will see the following output:
 
 [role="no_copy"]
 ----
@@ -336,7 +335,7 @@ To verify that the images are built, run the following command to list all exist
 gcloud container images list
 ```
 
-Your two images `system` and `inventory` should appear in the list of all container images:
+Your `system` and `inventory` images should appear in the list of all container images:
 
 [role="no_copy"]
 ----
@@ -356,7 +355,7 @@ When the cluster is created, the command outputs information about the cluster.
 You might need to wait while your cluster is being created.
 
 Replace `[cluster-name]` with a name that you want for your cluster.
-The name for your cluster must only contain lowercase alphanumeric characters and `-`,
+The name for your cluster must contain only lowercase alphanumeric characters and `-`,
 and must start with a letter and end with an alphanumeric character.
 
 [role=command]
@@ -364,7 +363,7 @@ and must start with a letter and end with an alphanumeric character.
 gcloud container clusters create [cluster-name] --num-nodes 1
 ```
 
-When your cluster is successfully created, you see the following output:
+When your cluster is successfully created, you will see the following output:
 
 [role="no_copy"]
 ----
@@ -375,7 +374,7 @@ NAME            LOCATION   MASTER_VERSION  MASTER_IP     MACHINE_TYPE   NODE_VER
 Since a zone was not specified in the `gcloud container clusters create` command,
 your cluster was created in the default zone that you previously set in the `gcloud config set compute/zone` command.
 
-The option `--num-nodes` creates a cluster with a certain number of nodes in the Kubernetes node pool. 
+The `--num-nodes` option creates a cluster with a certain number of nodes in the Kubernetes node pool. 
 By default, if this option is excluded, three nodes are assigned to the node pool.
 You created a single-node cluster since this application does not require a large amount of resources.
 
@@ -387,7 +386,7 @@ kubectl get nodes
 ```
 
 The `kubectl get nodes` command outputs information about the node.
-The `STATUS` of the node is in the `Ready` state.
+The `STATUS` of the node is in the `Ready` state:
 
 [role="no_copy"]
 ----
@@ -402,7 +401,7 @@ gke-[cluster-name]-default-pool-be4471fe-qnl6  Ready    <none>   46s   v1.14.10-
 
 == Deploying microservices to GKE
 
-Now that your container images are built and you have created a Kubernetes cluster, you can deploy the images using a Kubernetes resource definition.
+Now that your container images are built and you created a Kubernetes cluster, you can deploy the images using a Kubernetes resource definition.
 
 A Kubernetes resource definition is a `yaml` file that contains a description of all your 
 deployments, services, or any other resources that you want to deploy. All resources can 
@@ -416,7 +415,7 @@ Navigate to the `start` directory.
 
 [role="code_command hotspot file=0", subs="quotes"]
 ----
-#Update the `kubernetes.yaml`.#
+#Update the `kubernetes.yaml` file.#
 `kubernetes.yaml`
 ----
 [role="edit_command_text"]
@@ -434,8 +433,8 @@ to use for the container. The [hotspot]`kubernetes.yaml` file references the ima
 for the [hotspot=sysImage file=0]`system` and [hotspot=invImage file=0]`inventory` repositories.
 
 The service that is used to expose your deployments has a type of [hotspot=sysNodePort hotspot=invNodePort file=0]`NodePort`.
-This means you can access these services from outside of your cluster via a specific port.
-You can expose your services in other ways such as using a `LoadBalancer` service type or using an `Ingress`.
+This type means you can access these services from outside of your cluster via a specific port.
+You can expose your services in other ways, such as using a `LoadBalancer` service type or by using an `Ingress`.
 In production, you would most likely use an `Ingress`.
 
 === Deploying your application
@@ -450,7 +449,7 @@ Navigate to the `start` directory and run the following command to deploy the re
 kubectl apply -f kubernetes.yaml
 ```
 
-You will see an output similar to the following:
+You will see the following output:
 
 [role="no_copy"]
 ----
@@ -466,7 +465,7 @@ Run the following command to check the status of your pods:
 kubectl get pods
 ```
 
-If all the pods are healthy and running, you see an output similar to the following:
+If all the pods are healthy and running, you will see an output similar to the following example:
 [role="no_copy"]
 ----
 NAME                                    READY     STATUS    RESTARTS   AGE
@@ -487,7 +486,7 @@ gcloud compute firewall-rules create sys-node-port --allow tcp:31000
 gcloud compute firewall-rules create inv-node-port --allow tcp:32000
 ```
 
-Take note of the `EXTERNAL-IP` in the output of the following command. It is the hostname you will later substitute into `[hostname]`:
+Take note of the `EXTERNAL-IP` in the output of the following command. It is the hostname that you will later substitute into `[hostname]`:
 
 [role='command']
 ```
@@ -533,10 +532,10 @@ The default properties that are defined in the [hotspot file=0]`pom.xml` file ar
 [cols="15, 100", options="header"]
 |===
 | *Property*                                | *Description*
-| [hotspot=cluster file=0]`cluster.ip`                         | IP or hostname for your cluster.
-| [hotspot=system-service file=0]`system.kube.service`         | Name of the Kubernetes Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=system-node-port file=0]`system.node.port`          | The NodePort of the Kubernetes Service `system-service`, 31000 by default.
-| [hotspot=inventory-node-port file=0]`inventory.node.port`    | The NodePort of the Kubernetes Service `inventory-service`, 32000 by default.
+| [hotspot=cluster file=0]`cluster.ip`                         | The IP or hostname for your cluster.
+| [hotspot=system-service file=0]`system.kube.service`         | The name of the Kubernetes Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system-node-port file=0]`system.node.port`          | The NodePort of the `system-service` Kubernetes Service, 31000 by default.
+| [hotspot=inventory-node-port file=0]`inventory.node.port`    | The NodePort of the `inventory-service` Kubernetes Service, 32000 by default.
 |===
 
 
@@ -550,7 +549,7 @@ with the value determined in the previous section.
 mvn failsafe:integration-test -Dcluster.ip=[hostname]
 ```
 
-If the tests pass, you will see an output similar to the following for each service:
+If the tests pass, you will see the following output for each service:
 
 [role="no_copy"]
 ----
@@ -601,7 +600,7 @@ Delete the firewall rules for your node ports:
 gcloud compute firewall-rules delete sys-node-port inv-node-port
 ```
 
-Since you are done testing your cluster, clean up all of its related sources using the `gcloud container clusters delete` command.
+Since you are done testing your cluster, clean up all of its related sources by using the `gcloud container clusters delete` command:
 
 [role='command']
 ```
