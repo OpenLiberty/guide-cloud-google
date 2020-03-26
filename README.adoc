@@ -135,8 +135,7 @@ gcloud init
 Follow the prompt to log in with your Google Cloud Platform account.
 This authorizes Google Cloud SDK to access Google Cloud Platform using your account credentials.
 
-Create a new project for your guide.
-You will be prompted to do so if you have no projects in your account.
+If you have existing projects, do not use them. Instead, create a new project for this guide. If you don't have existing projects, you will be automatically prompted to create a new one.
 
 You will need to specify a Project ID for your project.
 Enter a Project ID that is unique within Google Cloud and matches the pattern described in the prompt.
