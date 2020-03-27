@@ -9,7 +9,7 @@
 :projectid: cloud-google
 :page-layout: guide-multipane
 :page-duration: 1 hour
-:page-releasedate: 2020-03-25
+:page-releasedate: 2020-03-27
 :page-description: Explore how to deploy microservices to Google Cloud Platform Kubernetes Engine (GKE).
 :page-tags: ['Kubernetes', 'Docker', 'Cloud']
 :page-permalink: /guides/{projectid}
