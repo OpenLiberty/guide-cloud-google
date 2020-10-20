@@ -272,6 +272,7 @@ Navigate to the `start` directory and run the following command:
 
 [role=command]
 ```
+cd start
 mvn package
 ```
 
