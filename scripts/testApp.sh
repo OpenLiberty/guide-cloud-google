@@ -32,5 +32,5 @@ kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
 
 # Clear .m2 cache and remove from kubectl
-kubectl delete -f test.yaml
+kubectl delete -f ../scripts/test.yaml
 rm -rf ~/.m2
