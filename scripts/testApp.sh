@@ -1,11 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
-##############################################################################
-##
-##  Travis CI test script
-##
-##############################################################################
+# Test app
 
 mvn -q package
 
@@ -34,3 +30,7 @@ mvn failsafe:verify
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
 
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
+
+# Clear .m2 cache and remove from kubectl
+kubectl delete -f ../scripts/test.yaml
+rm -rf ~/.m2
