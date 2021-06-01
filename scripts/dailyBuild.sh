@@ -18,7 +18,7 @@ cat system/pom.xml inventory/pom.xml
 sed -i "s;FROM openliberty/open-liberty:full-java8-openj9-ubi;FROM $DOCKER_USERNAME/olguides:$BUILD;g" inventory/Dockerfile system/Dockerfile
 cat inventory/Dockerfile system/Dockerfile
 
-docker pull $DOCKER_USERNAME"/olguides:"$BUILD
+docker pull "$DOCKER_USERNAME""/olguides:""$BUILD"
 
 sudo ../scripts/startMinikube.sh
 sudo ../scripts/testApp.sh
