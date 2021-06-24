@@ -502,8 +502,8 @@ gke-[cluster-name]-default-pool-be4   Ready    <none>   14m   v1.13.11-gke.23   
 
 To access your microservices, point your browser to the following URLs, substituting the appropriate `[hostname]` value:
 
-- `{system-api}`
-- `{inventory-api}`
+* `{system-api}`
+* `{inventory-api}`
 
 In the first URL, you see a result in JSON format with the system properties of the container JVM.
 The second URL returns an empty list, which is expected because no system properties are stored in the inventory yet. 
