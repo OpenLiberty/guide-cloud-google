@@ -17,22 +17,21 @@ sleep 120
 
 kubectl get pods
 
-echo `minikube ip`
+minikube ip
 
-GUIDE_IP=`minikube ip`
-GUIDE_SYSTEM_PORT=`kubectl get service system-service -o jsonpath="{.spec.ports[0].nodePort}"`
-GUIDE_INVENTORY_PORT=`kubectl get service inventory-service -o jsonpath="{.spec.ports[0].nodePort}"`
+GUIDE_IP=$(minikube ip)
+GUIDE_SYSTEM_PORT=$(kubectl get service system-service -o jsonpath="{.spec.ports[0].nodePort}")
+GUIDE_INVENTORY_PORT=49kubectl get service inventory-service -o jsonpath="{.spec.ports[0].nodePort}")
 
-curl http://$GUIDE_IP:$GUIDE_SYSTEM_PORT/system/properties
+curl "http://$GUIDE_IP:$GUIDE_SYSTEM_PORT/system/properties"
 
-curl http://$GUIDE_IP:$GUIDE_INVENTORY_PORT/inventory/systems/system-service
+curl "http://$GUIDE_IP:$GUIDE_INVENTORY_PORT/inventory/systems/system-service"
 
-mvn failsafe:integration-test -Dcluster.ip=`minikube ip`
+mvn failsafe:integration-test -Dcluster.ip=$GUIDE_IP
 mvn failsafe:verify
 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
-
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
+kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
+kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
 
 # Clear .m2 cache and remove from kubectl
 kubectl delete -f ../scripts/test.yaml
