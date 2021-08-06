@@ -27,7 +27,7 @@ curl "http://$GUIDE_IP:$GUIDE_SYSTEM_PORT/system/properties"
 
 curl "http://$GUIDE_IP:$GUIDE_INVENTORY_PORT/inventory/systems/system-service"
 
-mvn failsafe:integration-test -Dcluster.ip=$GUIDE_IP
+mvn failsafe:integration-test -Dcluster.ip="$GUIDE_IP"
 mvn failsafe:verify
 
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
