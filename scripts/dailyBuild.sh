@@ -6,7 +6,7 @@ do
         d) DRIVER="${OPTARG}";;
         b) BUILD="${OPTARG}";;
         u) DOCKER_USERNAME="${OPTARG}";;
-        *) echo "Invalid option chosen"
+        *) echo "Invalid option chosen";;
     esac
 done
 
