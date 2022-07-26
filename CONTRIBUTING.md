@@ -37,7 +37,7 @@ If reviewers agree with your change, your change will be merged to the `prod` br
 If you are contributing trivial code changes such as typos, redundant spaces, or minor formatting and spelling errors, follow the instructions under [Text or content contributions](./CONTRIBUTING.md#text-or-content-contributions).
 
 If you are contributing code changes via a pull request for non-trivial changes, you must sign off on the [Individual Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/release/cla/open-liberty-cla-individual.pdf). An example of a non-trivial change could be adding a new
-microservice to the backend application of the guide. 
+microservice to the backend application of the guide.
 
 If you are contributing changes as part of your job, you may also wish to have your employer sign a [Corporate Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/release/cla/open-liberty-cla-corporate.pdf).
 
