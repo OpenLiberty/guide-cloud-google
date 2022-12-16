@@ -3,7 +3,7 @@ set -euxo pipefail
 
 # Test app
 
-mvn -q package
+mvn -ntp -q package
 
 docker build -t system:test system/.
 docker build -t inventory:test inventory/.
@@ -24,8 +24,8 @@ curl http://$GUIDE_IP:$GUIDE_SYSTEM_PORT/system/properties
 
 curl http://$GUIDE_IP:$GUIDE_INVENTORY_PORT/inventory/systems/system-service
 
-mvn failsafe:integration-test -Dcluster.ip=`minikube ip`
-mvn failsafe:verify
+mvn -ntp failsafe:integration-test -Dcluster.ip=`minikube ip`
+mvn -ntp failsafe:verify
 
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
 
