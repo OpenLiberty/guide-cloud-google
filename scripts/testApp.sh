@@ -3,6 +3,14 @@ set -euxo pipefail
 
 # Test app
 
+#../scripts/startMinikube.sh
+minikube start
+minikube status
+#kubectl cluster-info
+#kubectl get services --all-namespaces
+#kubectl config view
+eval "$(minikube docker-env)"
+
 mvn -ntp -q package
 
 docker build -t system:test system/.
@@ -30,6 +38,9 @@ mvn -ntp failsafe:verify
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
 
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
+
+eval "$(minikube docker-env -u)"
+minikube stop
 
 # Clear .m2 cache and remove from kubectl
 kubectl delete -f ../scripts/test.yaml
