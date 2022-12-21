@@ -20,6 +20,4 @@ cat inventory/Dockerfile system/Dockerfile
 
 docker pull "$DOCKER_USERNAME""/olguides:""$BUILD"
 
-sudo ../scripts/startMinikube.sh
-sudo ../scripts/testApp.sh
-sudo ../scripts/stopMinikube.sh
+sudo -u runner ../scripts/testApp.sh

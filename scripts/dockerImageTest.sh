@@ -16,8 +16,6 @@ cat system/pom.xml inventory/pom.xml
 sed -i "s;FROM openliberty/open-liberty:full-java11-openj9-ubi;FROM openliberty/daily:latest;g" inventory/Dockerfile system/Dockerfile
 cat inventory/Dockerfile system/Dockerfile
 
-docker pull "openliberty/daily:latest"
+docker pull -q "openliberty/daily:latest"
 
-sudo ../scripts/startMinikube.sh
-sudo ../scripts/testApp.sh
-sudo ../scripts/stopMinikube.sh
+sudo -u runner ../scripts/testApp.sh
