@@ -22,7 +22,7 @@ sleep 120
 
 kubectl get pods
 
-echo "$(minikube ip)"
+minikube ip
 
 GUIDE_IP="$(minikube ip)"
 GUIDE_SYSTEM_PORT=$(kubectl get service system-service -o jsonpath="{.spec.ports[0].nodePort}")
@@ -35,9 +35,11 @@ curl http://"$GUIDE_IP":"$GUIDE_INVENTORY_PORT"/inventory/systems/system-service
 mvn -ntp failsafe:integration-test -Dcluster.ip="$(minikube ip)"
 mvn -ntp failsafe:verify
 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep "system")
+# shellcheck disable=SC2046
+kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep "inventory")
+# shellcheck disable=SC2046
+kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
 
 eval "$(minikube docker-env -u)"
 minikube stop
