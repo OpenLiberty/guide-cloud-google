@@ -32,7 +32,7 @@ curl http://"$GUIDE_IP":"$GUIDE_SYSTEM_PORT"/system/properties
 
 curl http://"$GUIDE_IP":"$GUIDE_INVENTORY_PORT"/inventory/systems/system-service
 
-mvn -ntp failsafe:integration-test -Dcluster.ip="$(minikube ip)"
+mvn -ntp failsafe:integration-test -Dcluster.ip="$GUIDE_IP"
 mvn -ntp failsafe:verify
 
 # shellcheck disable=SC2046
@@ -41,9 +41,9 @@ kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"
 # shellcheck disable=SC2046
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
 
-eval "$(minikube docker-env -u)"
-minikube stop
-
 # Clear .m2 cache and remove from kubectl
 kubectl delete -f ../scripts/test.yaml
 rm -rf ~/.m2
+
+eval "$(minikube docker-env -u)"
+minikube stop
