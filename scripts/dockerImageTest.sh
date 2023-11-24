@@ -18,6 +18,6 @@ cat inventory/Dockerfile system/Dockerfile
 
 echo "$DOCKER_PASSWORD" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin cp.stg.icr.io
 
-docker pull -q "cp.stg.icr.io/cp/olc/open-liberty-daily:full-java11-openj9-ubi"
+sudo docker pull -q "cp.stg.icr.io/cp/olc/open-liberty-daily:full-java11-openj9-ubi"
 
 sudo -u runner ../scripts/testApp.sh
