@@ -20,4 +20,4 @@ echo "$DOCKER_PASSWORD" | sudo docker login -u "$DOCKER_USERNAME" --password-std
 
 sudo docker pull -q "cp.stg.icr.io/cp/olc/open-liberty-daily:full-java11-openj9-ubi"
 
-sudo -u runner ../scripts/testApp.sh
+sudo -E -u runner ../scripts/testApp.sh
