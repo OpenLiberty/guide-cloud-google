@@ -65,7 +65,8 @@ public class SystemEndpointIT {
         WebTarget target = client.target(sysUrl);
         Response response = target.request().get();
 
-        assertEquals(200, response.getStatus(), "Incorrect response code from " + sysUrl);
+        assertEquals(200, response.getStatus(), "Incorrect response code from "
+                     + sysUrl);
         response.close();
     }
 
