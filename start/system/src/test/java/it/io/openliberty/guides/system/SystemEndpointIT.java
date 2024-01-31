@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2020 IBM Corporation and others.
+ * Copyright (c) 2020, 2024 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,12 +14,12 @@ package it.io.openliberty.guides.system;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
+import jakarta.net.ssl.HostnameVerifier;
+import jakarta.net.ssl.SSLSession;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.junit.jupiter.api.AfterEach;
@@ -41,7 +41,7 @@ public class SystemEndpointIT {
 
         sysUrl = "http://" + clusterIp + ":" + sysNodePort + "/system/properties/";
     }
-    
+
     @BeforeEach
     public void setup() {
         response = null;
@@ -70,5 +70,5 @@ public class SystemEndpointIT {
         assertEquals(200, response.getStatus(), "Incorrect response code from " + sysUrl);
         response.close();
     }
-    
+
 }
