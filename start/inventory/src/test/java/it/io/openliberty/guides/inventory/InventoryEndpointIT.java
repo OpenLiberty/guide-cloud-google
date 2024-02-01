@@ -23,7 +23,6 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -58,7 +57,6 @@ public class InventoryEndpointIT {
                     })
                     .build();
 
-        client.register(JsrJsonpProvider.class);
         client.target(invUrl + "reset").request().post(null);
     }
 
@@ -96,7 +94,7 @@ public class InventoryEndpointIT {
         int expected = 1;
         int actual = obj.getInt("total");
         assertEquals(expected, actual,
-                "The inventory should have one entry for the system service:"
+                "The inventory should have one entry for the system service: "
                     + sysKubeService);
 
         boolean serviceExists = obj.getJsonArray("systems").getJsonObject(0)

@@ -21,7 +21,6 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -60,7 +59,6 @@ public class SystemEndpointIT {
     @Test
     public void testGetProperties() {
         Client client = ClientBuilder.newClient();
-        client.register(JsrJsonpProvider.class);
 
         WebTarget target = client.target(sysUrl);
         Response response = target.request().get();

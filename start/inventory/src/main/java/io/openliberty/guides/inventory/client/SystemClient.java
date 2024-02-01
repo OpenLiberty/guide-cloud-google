@@ -34,12 +34,12 @@ public class SystemClient {
   private final String PROTOCOL = "http";
 
   @Inject
-  @ConfigProperty(name = "http.port")
-  String HTTP_PORT;
+  @ConfigProperty(name = "system.node.port")
+  String SYS_NODE_PORT;
 
   // Wrapper function that gets properties
   public Properties getProperties(String hostname) {
-    String url = buildUrl(PROTOCOL, hostname, Integer.valueOf(HTTP_PORT),
+    String url = buildUrl(PROTOCOL, hostname, Integer.valueOf(SYS_NODE_PORT),
                           SYSTEM_PROPERTIES);
     Builder clientBuilder = buildClientBuilder(url);
     return getPropertiesHelper(clientBuilder);
