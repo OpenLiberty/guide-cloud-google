@@ -1,25 +1,24 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2020 IBM Corporation and others.
+ * Copyright (c) 2020, 2024 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License 2.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * http://www.eclipse.org/legal/epl-2.0/
  *
- * Contributors:
- *     IBM Corporation - Initial implementation
+ * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
- // end::copyright[]
+// end::copyright[]
 package io.openliberty.guides.system;
 
 // CDI
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.GET;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.GET;
 // JAX-RS
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @RequestScoped
 @Path("/properties")
@@ -31,5 +30,5 @@ public class SystemResource {
     return Response.ok(System.getProperties())
       .header("X-Pod-Name", System.getenv("HOSTNAME"))
       .build();
-  } 
+  }
 }
