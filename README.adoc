@@ -276,7 +276,6 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role='command']
 ```
-cd start
 mvnw.cmd package
 ```
 --
@@ -285,7 +284,6 @@ mvnw.cmd package
 --
 [role='command']
 ```
-cd start
 ./mvnw package
 ```
 --
@@ -294,7 +292,6 @@ cd start
 --
 [role='command']
 ```
-cd start
 ./mvnw package
 ```
 --
