@@ -1,4 +1,4 @@
-// Copyright (c) 2020, 2021 IBM Corporation and others.
+// Copyright (c) 2020, 2025 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -270,11 +270,34 @@ https://openliberty.io/guides/containerize.html[Containerizing microservices^] g
 
 Navigate to the `start` directory and run the following command:
 
-[role=command]
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.windows_section]
+--
+[role='command']
 ```
 cd start
-mvn package
+mvnw.cmd package
 ```
+--
+
+[.tab_content.mac_section]
+--
+[role='command']
+```
+cd start
+./mvnw package
+```
+--
+
+[.tab_content.linux_section]
+--
+[role='command']
+```
+cd start
+./mvnw package
+```
+--
 
 Now that your microservices are packaged, build your container images by using Google Cloud Build.
 Instead of installing Docker locally to containerize your application, you can use Cloud Build's
@@ -545,10 +568,31 @@ The default properties that are defined in the [hotspot file=0]`pom.xml` file ar
 Run the Maven `failsafe:integration-test` goal to test your microservices by replacing the `[hostname]`
 with the value determined in the previous section.
 
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.windows_section]
+--
 [role='command']
 ```
-mvn failsafe:integration-test -Dcluster.ip=[hostname]
+mvnw.cmd failsafe:integration-test -Dcluster.ip=[hostname]
 ```
+--
+
+[.tab_content.mac_section]
+--
+[role='command']
+```
+./mvnw failsafe:integration-test -Dcluster.ip=[hostname]
+```
+--
+
+[.tab_content.linux_section]
+--
+[role='command']
+```
+./mvnw failsafe:integration-test -Dcluster.ip=[hostname]
+```
+--
 
 If the tests pass, you will see the following output for each service:
 
