@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
 
+./mvnw -version
+
 # Test app
 
 #../scripts/startMinikube.sh
@@ -11,7 +13,7 @@ minikube status
 #kubectl config view
 eval "$(minikube docker-env)"
 
-mvn -ntp -q package
+./mvnw -ntp -q package
 
 docker build -t system:test system/.
 docker build -t inventory:test inventory/.
@@ -32,8 +34,8 @@ curl http://"$GUIDE_IP":"$GUIDE_SYSTEM_PORT"/system/properties
 
 curl http://"$GUIDE_IP":"$GUIDE_INVENTORY_PORT"/inventory/systems/system-service
 
-mvn -ntp failsafe:integration-test -Dcluster.ip="$GUIDE_IP"
-mvn -ntp failsafe:verify
+./mvnw -ntp failsafe:integration-test -Dcluster.ip="$GUIDE_IP"
+./mvnw -ntp failsafe:verify
 
 # shellcheck disable=SC2046
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)

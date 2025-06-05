@@ -1,4 +1,4 @@
-// Copyright (c) 2020, 2021 IBM Corporation and others.
+// Copyright (c) 2020, 2025 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -11,7 +11,7 @@
 :page-duration: 1 hour
 :page-releasedate: 2020-03-27
 :page-description: Explore how to deploy microservices to Google Cloud Platform Kubernetes Engine (GKE).
-:page-tags: ['Kubernetes', 'Docker', 'Cloud']
+:page-tags: ['kubernetes', 'docker', 'cloud']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['kubernetes-intro', 'kubernetes-microprofile-config', 'kubernetes-microprofile-health']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
@@ -113,7 +113,7 @@ gcloud components install kubectl
 [role=command]
 include::{common-includes}/gitclone.adoc[]
 
-// no "try what you'll build" section in this guide since it would be too long due to all the setup the user will have to do.
+// No "try what you'll build" section in this guide; it would be too long due to all the setup the user will have to do.
 
 // =================================================================================================
 // Setting up your Google Cloud project
@@ -270,11 +270,31 @@ https://openliberty.io/guides/containerize.html[Containerizing microservices^] g
 
 Navigate to the `start` directory and run the following command:
 
-[role=command]
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.windows_section]
+--
+[role='command']
 ```
-cd start
-mvn package
+mvnw.cmd package
 ```
+--
+
+[.tab_content.mac_section]
+--
+[role='command']
+```
+./mvnw package
+```
+--
+
+[.tab_content.linux_section]
+--
+[role='command']
+```
+./mvnw package
+```
+--
 
 Now that your microservices are packaged, build your container images by using Google Cloud Build.
 Instead of installing Docker locally to containerize your application, you can use Cloud Build's
@@ -372,12 +392,12 @@ NAME            LOCATION   MASTER_VERSION  MASTER_IP     MACHINE_TYPE   NODE_VER
 [cluster-name]  [zone]     1.13.11-gke.23  35.203.77.52  n1-standard-1  1.13.11-gke.23  1          RUNNING
 ----
 
-Since a zone was not specified in the `gcloud container clusters create` command,
+Considering that a zone was not specified in the `gcloud container clusters create` command,
 your cluster was created in the default zone that you previously set in the `gcloud config set compute/zone` command.
 
 The `--num-nodes` option creates a cluster with a certain number of nodes in the Kubernetes node pool. 
 By default, if this option is excluded, three nodes are assigned to the node pool.
-You created a single-node cluster since this application does not require a large amount of resources.
+You created a single-node cluster as this application does not require a large amount of resources.
 
 Run the following command to check the status of the available node in your GKE cluster:
 
@@ -545,10 +565,31 @@ The default properties that are defined in the [hotspot file=0]`pom.xml` file ar
 Run the Maven `failsafe:integration-test` goal to test your microservices by replacing the `[hostname]`
 with the value determined in the previous section.
 
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.windows_section]
+--
 [role='command']
 ```
-mvn failsafe:integration-test -Dcluster.ip=[hostname]
+mvnw.cmd failsafe:integration-test -Dcluster.ip=[hostname]
 ```
+--
+
+[.tab_content.mac_section]
+--
+[role='command']
+```
+./mvnw failsafe:integration-test -Dcluster.ip=[hostname]
+```
+--
+
+[.tab_content.linux_section]
+--
+[role='command']
+```
+./mvnw failsafe:integration-test -Dcluster.ip=[hostname]
+```
+--
 
 If the tests pass, you will see the following output for each service:
 
@@ -601,7 +642,7 @@ Delete the firewall rules for your node ports:
 gcloud compute firewall-rules delete sys-node-port inv-node-port
 ```
 
-Since you are done testing your cluster, clean up all of its related sources by using the `gcloud container clusters delete` command:
+After you are done testing your cluster, clean up all of its related sources by using the `gcloud container clusters delete` command:
 
 [role='command']
 ```
