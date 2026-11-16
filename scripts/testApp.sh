@@ -15,12 +15,14 @@ eval "$(minikube docker-env)"
 
 ./mvnw -ntp -q package
 
+docker pull -q icr.io/appcafe/open-liberty:kernel-slim-java25-openj9-ubi-minimal
+
 docker build -t system:test system/.
 docker build -t inventory:test inventory/.
 
 kubectl apply -f ../scripts/test.yaml
 
-sleep 120
+sleep 180
 
 kubectl get pods
 
